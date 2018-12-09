@@ -105,5 +105,5 @@ PDFormacao = ProbDist(Respostas['Formacao'])
 PDProblema = ProbDist(Respostas['Problema'])
 PDFormacaoProblema = joint(PDFormacao, PDProblema, ' ')
 PEX2 = P(superior_incompleto, tal_que(problema_edicao, PDFormacaoProblema))
-"""Imprimindo resposta da questão 2"""
+"""Imprimindo resposta da questão 2."""
 print(PEX2)
