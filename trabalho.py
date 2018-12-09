@@ -1,5 +1,6 @@
 import csv
 from fractions import Fraction
+import operator
 
 Respostas = {
     "Formacao": {"Fundamental_Completo": 0, "Medio_Completo": 0, "Superior_Incompleto": 0, "Superior_Completo": 0,
@@ -146,6 +147,14 @@ def formacao_superior_incompleto(r):
     return 'Superior_Incompleto' in r
 
 
+def formacao_superior_incompleto_or_completo(r):
+    return 'Superior_Incompleto' in r or 'Superior_Completo' in r
+
+
+def formacao_fundamental_completo(r):
+    return 'Fundamental_Completo' in r
+
+
 def problema_edicao(r):
     return 'Referencia' in r or 'Citacao' in r or 'Pagina' in r
 
@@ -156,6 +165,14 @@ def problema_sumario(r):
 
 def ambiente_word(r):
     return 'Word' in r
+
+
+def ambiente_google_word(r):
+    return 'Google' in r or 'Word' in r
+
+
+def not_in_ambiente_google_word(r):
+    return 'Google' not in r and 'Word' not in r
 
 
 def ambiente_word_problema_sumario(r):
@@ -185,4 +202,23 @@ PDFerramenta = ProbDist(Respostas['Ferramenta'])
 PDProblemaAmbienteFerramenta = joint(PDProblemaAmbiente, PDFerramenta, ' ')
 PEX4 = P(ambiente_word_problema_sumario, tal_que(ferramenta_criacao_sumario, PDProblemaAmbienteFerramenta))
 """Imprimindo resposta da questão 4."""
-print(PEX4)
+# print(PEX4)
+
+
+PDFormacaoAmbiente = joint(PDFormacao, PDAmbiente, ' ')
+PEX5 = P(formacao_fundamental_completo, tal_que(ambiente_google_word, PDFormacaoAmbiente))
+"""Imprimindo resposta da questão 5."""
+# print(PEX5)
+
+
+PEX6 = P(formacao_superior_incompleto_or_completo, tal_que(not_in_ambiente_google_word, PDFormacaoAmbiente))
+"""Imprimindo resposta da questão 6."""
+# print(PEX6)
+
+
+PEX7 = tal_que(ambiente_word, PDProblemaAmbiente)
+result = {}
+for key in sorted(PEX7, key=PEX7.get, reverse=True)[:2]:
+    result.update({key: PEX7[key]})
+"""Imprimindo resposta da questão 7."""
+print(result)
