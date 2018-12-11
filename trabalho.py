@@ -198,10 +198,16 @@ def ferramenta_verificacao_plagio(r):
     return 'Plagio' in r
 
 
+"""Dados pegos do IBGE de 2019"""
+PDSexo = ProbDist(Sexo_M=102760295, Sexo_F=107386830)
+PEX1 = P(sexo_m, PDSexo)
+"""Imprimindo resposta da questão 1."""
+# print(PEX1)
+
 PDFormacao = ProbDist(Respostas['Formacao'])
 PDProblema = ProbDist(Respostas['Problema'])
 PDFormacaoProblema = joint(PDFormacao, PDProblema, ' ')
-PEX2 = P(formacao_superior_incompleto, tal_que(problema_edicao, PDFormacaoProblema))
+PEX2 = P(problema_edicao, tal_que(formacao_superior_incompleto, PDFormacaoProblema))
 """Imprimindo resposta da questão 2."""
 # print('%.1f%%' % (PEX2 * 100))
 # print(PEX2)
@@ -209,7 +215,7 @@ PEX2 = P(formacao_superior_incompleto, tal_que(problema_edicao, PDFormacaoProble
 
 PDAmbiente = ProbDist(Respostas['Ambiente'])
 PDProblemaAmbiente = joint(PDAmbiente, PDProblema, ' ')
-PEX3 = P(ambiente_word, tal_que(problema_sumario, PDProblemaAmbiente))
+PEX3 = P(problema_sumario, tal_que(ambiente_word, PDProblemaAmbiente))
 """Imprimindo resposta da questão 3."""
 # print('%.1f%%' % (PEX3 * 100))
 # print(PEX3)
@@ -217,20 +223,20 @@ PEX3 = P(ambiente_word, tal_que(problema_sumario, PDProblemaAmbiente))
 
 PDFerramenta = ProbDist(Respostas['Ferramenta'])
 PDProblemaAmbienteFerramenta = joint(PDProblemaAmbiente, PDFerramenta, ' ')
-PEX4 = P(ambiente_word_problema_sumario, tal_que(ferramenta_criacao_sumario, PDProblemaAmbienteFerramenta))
+PEX4 = P(ferramenta_criacao_sumario, tal_que(ambiente_word_problema_sumario, PDProblemaAmbienteFerramenta))
 """Imprimindo resposta da questão 4."""
 # print('%.1f%%' % (PEX4 * 100))
 # print(PEX4)
 
 
 PDFormacaoAmbiente = joint(PDFormacao, PDAmbiente, ' ')
-PEX5 = P(formacao_fundamental_completo, tal_que(ambiente_google_word, PDFormacaoAmbiente))
+PEX5 = P(ambiente_google_word, tal_que(formacao_fundamental_completo, PDFormacaoAmbiente))
 """Imprimindo resposta da questão 5."""
 # print('%.1f%%' % (PEX5 * 100))
 # print(PEX5)
 
 
-PEX6 = P(formacao_superior_incompleto_or_completo, tal_que(not_in_ambiente_google_word, PDFormacaoAmbiente))
+PEX6 = P(not_in_ambiente_google_word, tal_que(formacao_superior_incompleto_or_completo, PDFormacaoAmbiente))
 """Imprimindo resposta da questão 6."""
 # print('%.1f%%' % (PEX6 * 100))
 # print(PEX6)
@@ -246,21 +252,21 @@ for key in sorted(PEX7, key=PEX7.get, reverse=True)[:2]:
 
 """Dado que uma pessoa utiliza o ambiente Word, qual a probabilidade de que o mesmo gostaria de uma ferramenta de verificação de plagio?"""
 PDAmbienteFerramenta = joint(PDAmbiente, PDFerramenta, ' ')
-PEX8 = P(ambiente_word, tal_que(ferramenta_verificacao_plagio, PDAmbienteFerramenta))
+PEX8 = P(ferramenta_verificacao_plagio, tal_que(ambiente_word, PDAmbienteFerramenta))
 """Imprimindo resposta da questão 8."""
 # print('%.1f%%' % (PEX8 * 100))
 # print(PEX8)
 
 
 """Dado que uma pessoa tem problema com a criação de sumário, qual a probabilidade de que o mesmo use o ambiente de edição Libre Office?"""
-PEX9 = P(problema_sumario, tal_que(ambiente_libre_office, PDProblemaAmbiente))
+PEX9 = P(ambiente_libre_office, tal_que(problema_sumario, PDProblemaAmbiente))
 """Imprimindo resposta da questão 9."""
 # print('%.1f%%' % (PEX9 * 100))
 # print(PEX9)
 
 
 """Dado que uma pessoa tem pós-graduação, qual a probabilidade de que o mesmo tenha problema com a Criação de Sumário, Tabela e Referência?"""
-PEX10 = P(formacao_pos_graduacao, tal_que(problema_sumario_tabela_referencia, PDFormacaoProblema))
+PEX10 = P(problema_sumario_tabela_referencia, tal_que(formacao_pos_graduacao, PDFormacaoProblema))
 """Imprimindo resposta da questão 10."""
-#print('%.1f%%' % (PEX10 * 100))
-#print(PEX10)
+# print('%.1f%%' % (PEX10 * 100))
+# print(PEX10)
